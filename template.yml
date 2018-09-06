@@ -1,0 +1,2 @@
+language: java-svm-vertx
+fprocess: openfaas-vertx

@@ -9,7 +9,7 @@ Maven version: 3.5.x
 
 ### Handler
 
-The handler is written in the `./src/main/Handler.java` folder
+The handler is written in the `./src/main/Function.java` ffile
 
 Tests are supported with junit via files in `./src/test`
 
