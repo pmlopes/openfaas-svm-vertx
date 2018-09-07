@@ -4,15 +4,18 @@ FROM ubuntu:16.04 as build-aot
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && \
-    apt-get -y install gcc build-essential zlib1g zlib1g-dev wget && \
+    apt-get -y install gcc build-essential zlib1g zlib1g-dev curl && \
     rm -rf /var/lib/apt/lists/*
 
 ENV GRAALVM_VERSION=1.0.0-rc6
 
 # Get GraalVM CE
-RUN mkdir -p /opt/java
-RUN wget -c https://github.com/oracle/graal/releases/download/vm-${GRAALVM_VERSION}/graalvm-ce-${GRAALVM_VERSION}-linux-amd64.tar.gz
-RUN tar -zxf graalvm-ce-${GRAALVM_VERSION}-linux-amd64.tar.gz -C /opt/java
+# Alternatively use ADD https:// (which will not be cached by Docker builder)
+RUN echo "Pulling graalvm ${GRAALVM_VERSION} binary from Github." \
+    && curl -sSLf https://github.com/oracle/graal/releases/download/vm-${GRAALVM_VERSION}/graalvm-ce-${GRAALVM_VERSION}-linux-amd64.tar.gz > /tmp/graalvm-ce-${GRAALVM_VERSION}-linux-amd64.tar.gz \
+    && mkdir -p /opt/java \
+    && tar -zxf /tmp/graalvm-ce-${GRAALVM_VERSION}-linux-amd64.tar.gz -C /opt/java \
+    && rm /tmp/graalvm-ce-${GRAALVM_VERSION}-linux-amd64.tar.gz
 
 ENV GRAALVM_HOME=/opt/java/graalvm-ce-${GRAALVM_VERSION}
 ENV JAVA_HOME=${GRAALVM_HOME}
@@ -28,14 +31,11 @@ ADD .mvn /app/.mvn/
 # Add settings.xml to allow snapshots
 ADD settings.xml /root/.m2/
 
-# build the entrypoint bit
+# build the entrypoint
 ADD entrypoint /app/entrypoint
-RUN ./mvnw -Pnative-image dependency:go-offline -f /app/entrypoint/pom.xml
 RUN ./mvnw -Pnative-image -f /app/entrypoint/pom.xml
 # build the function
-ADD function/pom.xml /app/function/
-RUN ./mvnw -Pnative-image dependency:go-offline -f /app/entrypoint/pom.xml
-ADD function/src /app/function/src
+ADD function /app/function
 RUN ./mvnw -Pnative-image -f /app/function/pom.xml
 
 # At this point the native image is built
