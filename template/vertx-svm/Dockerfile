@@ -58,10 +58,6 @@ WORKDIR /home/app
 # Copy generated native executable from build-aot
 COPY --from=build-aot /app/target/openfaas.vertx-0.0.1-SNAPSHOT-fat /usr/bin/vertx-fn
 
-# chmod for tmp is for a buildkit issue (@alexellis)
-RUN chown app:app -R /home/app \
-    && chmod 777 /tmp
-
 USER app
 
 ENV cgi_headers="true"
