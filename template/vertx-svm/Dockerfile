@@ -27,13 +27,16 @@ ADD mvnw /app/
 ADD .mvn /app/.mvn/
 # Add settings.xml to allow snapshots
 ADD settings.xml /root/.m2/
-ADD pom.xml /app/
-# build all dependencies for offline use
-RUN ./mvnw -Pnative-image dependency:go-offline -B
-# Add the sources
-ADD src /app/src/
-# Build (java side)
-RUN ./mvnw -Pnative-image
+
+# build the entrypoint bit
+ADD entrypoint /app/entrypoint
+RUN ./mvnw -Pnative-image dependency:go-offline -f /app/entrypoint/pom.xml
+RUN ./mvnw -Pnative-image -f /app/entrypoint/pom.xml
+# build the function
+ADD function/pom.xml /app/function/
+RUN ./mvnw -Pnative-image dependency:go-offline -f /app/entrypoint/pom.xml
+ADD function/src /app/function/src
+RUN ./mvnw -Pnative-image -f /app/function/pom.xml
 
 # At this point the native image is built
 
@@ -56,7 +59,7 @@ RUN mkdir -p /home/app
 # Wrapper/boot-strapper
 WORKDIR /home/app
 # Copy generated native executable from build-aot
-COPY --from=build-aot /app/target/openfaas.vertx-0.0.1-SNAPSHOT-fat /usr/bin/vertx-fn
+COPY --from=build-aot /app/function/target/openfaas.vertx.svm.function-0.0.1-SNAPSHOT-fat /usr/bin/vertx-fn
 
 USER app
 

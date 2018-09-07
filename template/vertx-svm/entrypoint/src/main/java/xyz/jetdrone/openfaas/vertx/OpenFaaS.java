@@ -18,10 +18,9 @@ package xyz.jetdrone.openfaas.vertx;
 import io.vertx.core.Handler;
 import io.vertx.ext.web.RoutingContext;
 
-public class Function implements Handler<RoutingContext> {
+/**
+ * This is the base Interface for a OpenFaaS Function
+ */
+public interface OpenFaaS extends Handler<RoutingContext> {
 
-  @Override
-  public void handle(RoutingContext ctx) {
-    ctx.response().end("OK");
-  }
 }

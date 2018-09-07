@@ -1,54 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>xyz.jetdrone</groupId>
-  <artifactId>openfaas.vertx</artifactId>
+  <artifactId>openfaas.vertx.svm.function</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 
-  <name>openfaas-vertx-svm-template</name>
   <description>OpenFAAS GraalVM native image Fn template</description>
-
-  <properties>
-    <main.verticle>xyz.jetdrone.openfaas.vertx.Entrypoint</main.verticle>
-  </properties>
 
   <profiles>
     <profile>
       <id>native-image</id>
-      <dependencies>
-        <dependency>
-          <groupId>com.oracle</groupId>
-          <artifactId>substrate</artifactId>
-          <version>1.0.0-rc6</version>
-          <scope>system</scope>
-          <systemPath>${java.home}/lib/svm/builder/svm.jar</systemPath>
-        </dependency>
-      </dependencies>
       <build>
         <defaultGoal>package exec:exec</defaultGoal>
         <plugins>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>build-helper-maven-plugin</artifactId>
-            <version>3.0.0</version>
-            <executions>
-              <execution>
-                <phase>generate-sources</phase>
-                <goals>
-                  <goal>add-source</goal>
-                </goals>
-                <configuration>
-                  <sources>
-                    <source>src/main/svm</source>
-                  </sources>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>exec-maven-plugin</artifactId>
@@ -83,14 +50,9 @@
 
   <dependencies>
     <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-core</artifactId>
-      <version>3.6.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-web</artifactId>
-      <version>3.6.0-SNAPSHOT</version>
+      <groupId>xyz.jetdrone</groupId>
+      <artifactId>openfaas.vertx.svm.entrypoint</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
     </dependency>
   </dependencies>
 
@@ -132,7 +94,7 @@
               <transformers>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                   <manifestEntries>
-                    <Main-Class>${main.verticle}</Main-Class>
+                    <Main-Class>xyz.jetdrone.openfaas.vertx.Entrypoint</Main-Class>
                   </manifestEntries>
                 </transformer>
               </transformers>
