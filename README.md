@@ -6,18 +6,17 @@ The GraalVM SVM (Eclipse Vert.x native image) template uses maven as a build sys
 
 This a template showcasing the use of GraalVM/SubstrateVM and Eclipse Vert.x as a viable runtime for Serverless functions.
 
-Functions are pure java `io.vertx.core.Handler<io.vertx.ext.web.RoutingContext>` implementations. The minimal function can be:
+Functions are pure java `xyz.jetdrone.openfaas.vertx.OpenFaaS` implementations. The minimal function can be:
 
 ```java
-import io.vertx.core.Handler;
 import io.vertx.ext.web.RoutingContext;
+import xyz.jetdrone.openfaas.vertx.OpenFaaS;
 
-public class Function implements Handler<RoutingContext> {
-
+public class MyFunction implements OpenFaaS {
   @Override
   public void handle(RoutingContext ctx) {
-    ctx.response().end("OK");
-  }
+		ctx.response().end("Hi!");
+	}
 }
 ```
 
