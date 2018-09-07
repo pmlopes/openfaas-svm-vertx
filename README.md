@@ -2,6 +2,8 @@
 
 The GraalVM SVM (Eclipse Vert.x native image) template uses maven as a build system.
 
+The template makes use of the OpenFaaS incubator project [of-watchdog](https://github.com/openfaas-incubator/of-watchdog).
+
 ### Structure
 
 This a template showcasing the use of GraalVM/SubstrateVM and Eclipse Vert.x as a viable runtime for Serverless functions.
@@ -23,17 +25,19 @@ public class MyFunction implements OpenFaaS {
 The provided entrypoint will setup the required HTTP server and will handle all the upload parsing making it available on the
 `RoutingContext` of the function.
 
-#### Development
+### Trying the template
 
-Developing functions will follow the traditional java development model and the maven POM model. Dependencies and Tests can be
-added to the `pom.xml` file as usual plus tests can be added to `src/test/java`.
+```
+$ faas template pull https://github.com/pmlopes/openfaas-svm-vertx
+$ faas new --lang vertx-svm <fn-name>
+```
 
 ### Building
 
 When working in development mode, the java application is build as usual:
 
 ```
-./mvnw clean package
+mvn clean package
 ```
 
 When going to OpenFAAS, the build is run inside a Docker container using the provided `Dockerfile`.
