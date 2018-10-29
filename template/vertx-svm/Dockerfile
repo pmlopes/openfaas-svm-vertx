@@ -7,7 +7,7 @@ RUN apt-get update && \
     apt-get -y install gcc build-essential zlib1g zlib1g-dev curl && \
     rm -rf /var/lib/apt/lists/*
 
-ENV GRAALVM_VERSION=1.0.0-rc6
+ENV GRAALVM_VERSION=1.0.0-rc8
 
 # Get GraalVM CE
 # Alternatively use ADD https:// (which will not be cached by Docker builder)
