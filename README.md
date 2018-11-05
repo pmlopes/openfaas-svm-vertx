@@ -44,13 +44,11 @@ When going to OpenFAAS, the build is run inside a Docker container using the pro
 
 The Dockerfile performs the following actions:
 
-1. Downloads GraalVM CE
-2. Sets the GraalVM as the default Java SDK
-3. Builds the Java code
-4. Generates a native image from the fat jar
-5. Creates a new image and install OpenFAAS of-watchdog
-6. Copies the native image to the new container
-7. Configures the watchdog
+1. Builds the Java code
+2. Generates a native image from the fat jar
+3. Creates a new image and install OpenFAAS of-watchdog
+4. Copies the native image to the new container
+5. Configures the watchdog
 
 You can also run the Dockerfile locally:
 

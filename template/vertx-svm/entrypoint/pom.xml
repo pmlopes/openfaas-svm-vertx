@@ -15,11 +15,10 @@
       <id>native-image</id>
       <dependencies>
         <dependency>
-          <groupId>com.oracle</groupId>
-          <artifactId>substrate</artifactId>
-          <version>1.0.0-rc6</version>
-          <scope>system</scope>
-          <systemPath>${java.home}/lib/svm/builder/svm.jar</systemPath>
+          <groupId>com.oracle.substratevm</groupId>
+          <artifactId>svm</artifactId>
+          <version>[1.0.0-rc8,)</version>
+          <scope>provided</scope>
         </dependency>
       </dependencies>
       <build>

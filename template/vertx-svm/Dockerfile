@@ -1,25 +1,5 @@
 # Get a build environment
-FROM ubuntu:16.04 as build-aot
-
-ENV DEBIAN_FRONTEND noninteractive
-
-RUN apt-get update && \
-    apt-get -y install gcc build-essential zlib1g zlib1g-dev curl && \
-    rm -rf /var/lib/apt/lists/*
-
-ENV GRAALVM_VERSION=1.0.0-rc6
-
-# Get GraalVM CE
-# Alternatively use ADD https:// (which will not be cached by Docker builder)
-RUN echo "Pulling graalvm ${GRAALVM_VERSION} binary from Github." \
-    && curl -sSLf https://github.com/oracle/graal/releases/download/vm-${GRAALVM_VERSION}/graalvm-ce-${GRAALVM_VERSION}-linux-amd64.tar.gz > /tmp/graalvm-ce-${GRAALVM_VERSION}-linux-amd64.tar.gz \
-    && mkdir -p /opt/java \
-    && tar -zxf /tmp/graalvm-ce-${GRAALVM_VERSION}-linux-amd64.tar.gz -C /opt/java \
-    && rm /tmp/graalvm-ce-${GRAALVM_VERSION}-linux-amd64.tar.gz
-
-ENV GRAALVM_HOME=/opt/java/graalvm-ce-${GRAALVM_VERSION}
-ENV JAVA_HOME=${GRAALVM_HOME}
-ENV PATH=${PATH}:${JAVA_HOME}/bin
+FROM oracle/graalvm-ce:1.0.0-rc8 as build-aot
 
 # Set working dir
 RUN mkdir /app
@@ -28,6 +8,7 @@ WORKDIR /app
 # Add maven wrapper
 ADD mvnw /app/
 ADD .mvn /app/.mvn/
+# TODO: remove me once 3.6 is out
 # Add settings.xml to allow snapshots
 ADD settings.xml /root/.m2/
 
@@ -42,6 +23,7 @@ RUN ./mvnw -Pnative-image -f /app/function/pom.xml
 
 # Create new image from alpine
 FROM frolvlad/alpine-glibc:alpine-3.8
+RUN apk add --no-cache ca-certificates
 
 RUN addgroup -S app && adduser -S -g app app
 
@@ -58,6 +40,8 @@ RUN mkdir -p /home/app
 
 # Wrapper/boot-strapper
 WORKDIR /home/app
+# Copy the SUNEC lib from graal to the final image
+COPY --from=build-aot /opt/graalvm-ce-1.0.0-rc8/jre/lib/amd64/libsunec.so /usr/lib/libsunec.so
 # Copy generated native executable from build-aot
 COPY --from=build-aot /app/function/target/openfaas.vertx.svm.function-0.0.1-SNAPSHOT-fat /usr/bin/vertx-fn
 
