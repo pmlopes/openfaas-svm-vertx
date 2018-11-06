@@ -1,5 +1,5 @@
 # Get a build environment
-FROM oracle/graalvm-ce:1.0.0-rc8 as build-aot
+FROM oracle/graalvm-ce:1.0.0-rc9 as build-aot
 
 # Set working dir
 RUN mkdir /app
@@ -41,7 +41,7 @@ RUN mkdir -p /home/app
 # Wrapper/boot-strapper
 WORKDIR /home/app
 # Copy the SUNEC lib from graal to the final image
-COPY --from=build-aot /opt/graalvm-ce-1.0.0-rc8/jre/lib/amd64/libsunec.so /usr/lib/libsunec.so
+COPY --from=build-aot /opt/graalvm-ce-1.0.0-rc9/jre/lib/amd64/libsunec.so /usr/lib/libsunec.so
 # Copy generated native executable from build-aot
 COPY --from=build-aot /app/function/target/openfaas.vertx.svm.function-0.0.1-SNAPSHOT-fat /usr/bin/vertx-fn
 

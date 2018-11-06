@@ -31,12 +31,15 @@
               <executable>${java.home}/bin/native-image</executable>
               <arguments>
                 <argument>--no-server</argument>
-                <argument>--delay-class-initialization-to-runtime=io.netty.handler.codec.http.HttpObjectEncoder,io.netty.handler.codec.http2.Http2CodecUtil,io.netty.handler.codec.http2.DefaultHttp2FrameWriter,io.netty.handler.codec.http.websocketx.WebSocket00FrameEncoder,io.netty.handler.ssl.JdkNpnApplicationProtocolNegotiator,io.netty.handler.ssl.ReferenceCountedOpenSslEngine</argument>
+                <argument>--enable-all-security-services</argument>
+                <argument>--enable-url-protocols=https</argument>
+                <argument>-H:+ReportUnsupportedElementsAtRuntime</argument>
+                <argument>--rerun-class-initialization-at-runtime=io.netty.handler.codec.http2.Http2CodecUtil</argument>
+                <argument>--delay-class-initialization-to-runtime=io.netty.handler.codec.http.HttpObjectEncoder,io.netty.handler.codec.http2.DefaultHttp2FrameWriter,io.netty.handler.codec.http.websocketx.WebSocket00FrameEncoder,io.netty.handler.ssl.JdkNpnApplicationProtocolNegotiator,io.netty.handler.ssl.ReferenceCountedOpenSslEngine</argument>
                 <argument>-Dvertx.disableDnsResolver=true</argument>
                 <argument>-H:Name=${project.name}</argument>
                 <argument>-H:Path=${project.build.directory}</argument>
-                <argument>-H:IncludeResources=(META-INF/services|static|webroot|template)/.*</argument>
-                <argument>-H:+ReportUnsupportedElementsAtRuntime</argument>
+                <argument>-H:IncludeResources=(META-INF/vertx|META-INF/services|static|webroot|template)/.*</argument>
                 <argument>-H:ReflectionConfigurationFiles=${project.basedir}/src/main/svm/reflection.json</argument>
                 <argument>-jar</argument>
                 <argument>${project.build.directory}/${project.artifactId}-${project.version}-fat.jar</argument>
