@@ -16,6 +16,7 @@
 package xyz.jetdrone.openfaas.vertx;
 
 import java.util.ServiceLoader;
+import java.util.function.Consumer;
 
 import io.vertx.core.Vertx;
 
@@ -44,9 +45,9 @@ public class Entrypoint {
 
     app.route().handler(BodyHandler.create());
 
-    ServiceLoader<OpenFaaS> serviceLoader = ServiceLoader.load(OpenFaaS.class);
-    for (OpenFaaS fn : serviceLoader) {
-      app.route().handler(fn);
+    ServiceLoader<Consumer> serviceLoader = ServiceLoader.load(Consumer.class);
+    for (Consumer fn : serviceLoader) {
+      app.route().handler(fn::accept);
     }
 
     vertx.createHttpServer()

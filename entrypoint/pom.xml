@@ -4,48 +4,17 @@
 
   <modelVersion>4.0.0</modelVersion>
 
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>9</version>
+  </parent>
+
   <groupId>xyz.jetdrone</groupId>
   <artifactId>openfaas.vertx.svm.entrypoint</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.1</version>
 
   <description>OpenFAAS GraalVM native image Fn entrypoint</description>
-
-  <profiles>
-    <profile>
-      <id>native-image</id>
-      <dependencies>
-        <dependency>
-          <groupId>com.oracle.substratevm</groupId>
-          <artifactId>svm</artifactId>
-          <version>[1.0.0-rc10,)</version>
-          <scope>provided</scope>
-        </dependency>
-      </dependencies>
-      <build>
-        <defaultGoal>install</defaultGoal>
-        <plugins>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>build-helper-maven-plugin</artifactId>
-            <version>3.0.0</version>
-            <executions>
-              <execution>
-                <phase>generate-sources</phase>
-                <goals>
-                  <goal>add-source</goal>
-                </goals>
-                <configuration>
-                  <sources>
-                    <source>src/main/svm</source>
-                  </sources>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
 
   <dependencies>
     <dependency>
@@ -57,6 +26,18 @@
       <groupId>io.vertx</groupId>
       <artifactId>vertx-web</artifactId>
       <version>3.6.2</version>
+    </dependency>
+    <dependency>
+      <groupId>com.oracle.substratevm</groupId>
+      <artifactId>svm</artifactId>
+      <version>1.0.0-rc11</version>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>com.oracle.substratevm</groupId>
+          <artifactId>svm-hosted-native-windows-amd64</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
 
