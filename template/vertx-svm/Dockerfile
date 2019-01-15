@@ -1,5 +1,5 @@
 # Get a build environment
-FROM oracle/graalvm-ce:1.0.0-rc9 as build-aot
+FROM oracle/graalvm-ce:1.0.0-rc10 as build-aot
 
 # Set working dir
 RUN mkdir /app
@@ -8,9 +8,6 @@ WORKDIR /app
 # Add maven wrapper
 ADD mvnw /app/
 ADD .mvn /app/.mvn/
-# TODO: remove me once 3.6 is out
-# Add settings.xml to allow snapshots
-ADD settings.xml /root/.m2/
 
 # build the entrypoint
 ADD entrypoint /app/entrypoint
