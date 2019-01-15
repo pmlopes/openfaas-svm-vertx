@@ -10,18 +10,18 @@
  *  http://www.opensource.org/licenses/apache2.0.php
  *
  *  You may elect to redistribute this code under either of these licenses.
- */import io.vertx.ext.web.RoutingContext;
+ */
+ import io.vertx.ext.web.RoutingContext;
+ import java.util.function.Consumer;
 
-import xyz.jetdrone.openfaas.vertx.OpenFaaS;
-
-public class MyFunction implements OpenFaaS {
+public class MyFunction implements Consumer<RoutingContext> {
 
   public MyFunction() {
     System.out.println("Loaded MyFunction!");
   }
 
   @Override
-  public void handle(RoutingContext ctx) {
+  public void accept(RoutingContext ctx) {
 		ctx.response().end("Hi!");
 	}
 
