@@ -8,13 +8,9 @@ WORKDIR /app
 # Add maven wrapper
 ADD mvnw /app/
 ADD .mvn /app/.mvn/
-
-# build the entrypoint
-ADD entrypoint /app/entrypoint
-RUN ./mvnw -Pnative-image -f /app/entrypoint/pom.xml
 # build the function
 ADD function /app/function
-RUN ./mvnw -Pnative-image -f /app/function/pom.xml
+RUN ./mvnw -f /app/function/pom.xml package
 
 # At this point the native image is built
 
@@ -27,7 +23,7 @@ RUN addgroup -S app && adduser -S -g app app
 # Alternatively use ADD https:// (which will not be cached by Docker builder)
 RUN apk --no-cache add ca-certificates curl \
     && echo "Pulling watchdog binary from Github." \
-    && curl -sSLf https://github.com/openfaas-incubator/of-watchdog/releases/download/0.4.1/of-watchdog > /usr/bin/fwatchdog \
+    && curl -sSLf https://github.com/openfaas-incubator/of-watchdog/releases/download/0.4.6/of-watchdog > /usr/bin/fwatchdog \
     && chmod +x /usr/bin/fwatchdog \
     && apk del curl --no-cache
 
@@ -38,9 +34,9 @@ RUN mkdir -p /home/app
 # Wrapper/boot-strapper
 WORKDIR /home/app
 # Copy the SUNEC lib from graal to the final image
-COPY --from=build-aot /opt/graalvm-ce-1.0.0-rc9/jre/lib/amd64/libsunec.so /usr/lib/libsunec.so
+COPY --from=build-aot /opt/graalvm-ce-1.0.0-rc10/jre/lib/amd64/libsunec.so /usr/lib/libsunec.so
 # Copy generated native executable from build-aot
-COPY --from=build-aot /app/function/target/openfaas.vertx.svm.function-0.0.1-SNAPSHOT-fat /usr/bin/vertx-fn
+COPY --from=build-aot /app/function/target/xyz.jetdrone.openfaas.vertx.entrypoint /usr/bin/vertx-fn
 
 USER app
 
