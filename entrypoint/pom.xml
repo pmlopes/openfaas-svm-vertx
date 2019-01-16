@@ -12,7 +12,7 @@
 
   <groupId>xyz.jetdrone</groupId>
   <artifactId>openfaas.vertx.svm.entrypoint</artifactId>
-  <version>0.0.0-11</version>
+  <version>1.0.0-rc11</version>
 
   <description>OpenFAAS GraalVM native image Fn entrypoint</description>
 
