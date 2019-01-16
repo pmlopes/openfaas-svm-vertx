@@ -11,17 +11,13 @@
  *
  *  You may elect to redistribute this code under either of these licenses.
  */
+ import io.vertx.core.Handler;
  import io.vertx.ext.web.RoutingContext;
- import java.util.function.Consumer;
 
-public class MyFunction implements Consumer<RoutingContext> {
-
-  public MyFunction() {
-    System.out.println("Loaded MyFunction!");
-  }
+public class MyFunction implements Handler<RoutingContext> {
 
   @Override
-  public void accept(RoutingContext ctx) {
+  public void handle(RoutingContext ctx) {
 		ctx.response().end("Hi!");
 	}
 
