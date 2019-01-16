@@ -17,7 +17,8 @@ import com.oracle.svm.core.annotate.*;
 import org.graalvm.nativeimage.*;
 
 import io.netty.handler.codec.compression.*;
-import io.netty.util.internal.logging.*;
+import io.netty.util.internal.logging.InternalLoggerFactory;
+import io.netty.util.internal.logging.JdkLoggerFactory;
 import io.vertx.core.Vertx;
 import io.vertx.core.dns.AddressResolverOptions;
 import io.vertx.core.impl.resolver.DefaultResolverProvider;
