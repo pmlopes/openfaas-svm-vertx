@@ -14,6 +14,12 @@
  import io.vertx.core.Handler;
  import io.vertx.ext.web.RoutingContext;
 
+/**
+ * This is your main function, implement the handle method with your function.
+ *
+ * If function composition is required, add more functions and register them
+ * in the META-INF/services/io.vertx.core.Handler
+ */
 public class MyFunction implements Handler<RoutingContext> {
 
   @Override
