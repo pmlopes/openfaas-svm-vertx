@@ -16,7 +16,6 @@
 package xyz.jetdrone.openfaas.vertx;
 
 import java.util.ServiceLoader;
-import java.util.function.Consumer;
 
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
@@ -38,6 +37,7 @@ public class Entrypoint {
     return port;
   }
 
+  @SuppressWarnings("unchecked")
   public static void main(String[] args) {
     final int port = getListenPort();
 
@@ -48,7 +48,7 @@ public class Entrypoint {
 
     ServiceLoader<Handler> serviceLoader = ServiceLoader.load(Handler.class);
     for (Handler fn : serviceLoader) {
-      app.route().handler(fn::handle);
+      app.route().handler(fn);
     }
 
     vertx.createHttpServer()
